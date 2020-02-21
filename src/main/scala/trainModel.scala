@@ -14,6 +14,7 @@ object trainModel extends App {
   val data = sc.textFile(data_path)
   val parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble))).cache()
   //val parsedData = data.map(s => s.split(',')).cache()
+  print(parsedData)
 
   // set the number of cluster for the K-means
   // val numClusters = 5
@@ -26,8 +27,8 @@ object trainModel extends App {
   println(s"Within Set Sum of Squared Errors = $WSSSE")
 
   // save and load model
-  clusters.save(sc, "target/org/apache/spark/KMeansExample/KMeansModel")
-  val sameModel = KMeansModel.load(sc, "target/org/apache/spark/KMeansExample/KMeansModel")
+  clusters.save(sc, "models/KMeansModel")
+  val sameModel = KMeansModel.load(sc, "models/KMeansModel")
 
   sc.stop()
 }

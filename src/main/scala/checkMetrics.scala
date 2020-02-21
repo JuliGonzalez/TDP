@@ -1,18 +1,25 @@
-import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql.SparkSession
 import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkContext, SparkConf}
+
 
 
 object checkMetrics extends App{
-  Logger.getLogger("logging.checkMetrics").setLevel(Level.ERROR)
-  val session =  SparkSession
+  Logger.getLogger("logging.checkMetrics").setLevel(Level.OFF)
+ /* val session =  SparkSession
     .builder()
     .appName("Check_Metrics")
     .master("local[*]")
     .getOrCreate()
-
+*/
   val input_file_path: String = "input/KDDTrain.csv"
+  val input_file_path_txt: String = "input/KDDTrain+.txt"
 
-  val df = session.read.csv(input_file_path)
-  print(df)
+  val conf = new SparkConf().setAppName("checkingMetrics").setMaster("local[*]")
+  val sc = new SparkContext(conf)
+
+  val text = sc.textFile(input_file_path)
+  print(text.count())
+  val data = text.map(s => s.split(","))
+  print(data)
 }
