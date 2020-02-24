@@ -9,7 +9,7 @@ class ModifyInputFile(object):
     def __init__(self, file_path):
         self.file_path = file_path
 
-    def get_headers(self):
+    def set_headers(self):
         pass
 
     def add_new_columns(self, headers_to_include):
