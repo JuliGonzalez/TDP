@@ -21,6 +21,7 @@ class ModifyInputFile(object):
                         'Dst_host_serror_rate', 'Dst_host_srv_serror_rate', 'Dst_host_rerror_rate',
                         'Dst_host_srv_ferror_rate', 'unknown_value', 'type', 'level']
 
+<<<<<<< HEAD
     def add_needed_columns(self):
         df = pd.read_csv(self.file_path, sep=',', names=self.header)
         columns_to_add = ['']
@@ -28,6 +29,21 @@ class ModifyInputFile(object):
             print(columns)
             print(type(columns))
         print(df.head())
+=======
+    def set_headers(self):
+        pass
+
+    def add_new_columns(self, headers_to_include):
+        pass
+
+    def drop_old_columns(self, headers_to_remove):
+        pass
+
+    def export_updated_input_file(self, df):
+        df.to_csv("../../input/KDDTrainCleaned.csv", sep=',') # csv or txt, not sure yet
+
+
+>>>>>>> 10cc97b9c9e30be17d7d6bb8b404f6e5aab84a09
 
 print("hello world")
 if __name__ == '__main__':
