@@ -19,33 +19,54 @@ class ModifyInputFile(object):
                         'Dst_host_count', 'Dst_host_srv_count', 'Dst_host_same_srv_rate',
                         'Dst_host_diff_srv_rate', 'Dst_host_same_src_port_rate', 'Dst_host_srv_diff_host_rate',
                         'Dst_host_serror_rate', 'Dst_host_srv_serror_rate', 'Dst_host_rerror_rate',
-                        'Dst_host_srv_ferror_rate', 'unknown_value', 'type', 'level']
+                        'Dst_host_srv_ferror_rate', 'unknown_value', 'Attack_type', 'level']
+        self.headers_to_check = ['Protocol_type', 'Service', 'Flag', 'Attack_type']
+        self.df = None
 
-<<<<<<< HEAD
     def add_needed_columns(self):
+        unique_values_list = []
         df = pd.read_csv(self.file_path, sep=',', names=self.header)
         columns_to_add = ['']
         for columns in df:
             print(columns)
             print(type(columns))
         print(df.head())
-=======
+        unique_values_list.append(df['Service'].unique().tolist())
+        print(df.Protocol_type.unique().tolist())
+        print(unique_values_list)
+
+    @staticmethod
     def set_headers(self):
-        pass
+        df = pd.read_csv(self.file_path, sep=',', names=self.header)
+        return df
 
-    def add_new_columns(self, headers_to_include):
-        pass
+    def add_new_columns(self):
+        self.df = self.set_headers(self)
+        unique_values_to_include = []
+        for column in self.headers_to_check:
+            unique_values_to_include.append(self.df[column].unique().tolist())
+        print(unique_values_to_include)
+        for index, column_list in enumerate(unique_values_to_include):
+            original_column = self.headers_to_check[index]
+            for new_column in column_list:
+                self.df[new_column] = self.df[original_column].apply(lambda x: 1 if x == new_column else 0)
+        print(self.df.info())
+        for col in self.df.columns:
+            print(col)
+        print(self.df.head())
 
-    def drop_old_columns(self, headers_to_remove):
+
+    def drop_old_columns(self):
         pass
+        # TODO
+        # get self.columns_to_check and remove them from the df
 
     def export_updated_input_file(self, df):
         df.to_csv("../../input/KDDTrainCleaned.csv", sep=',') # csv or txt, not sure yet
+        # TODO
+        # not sure if headers must be inside the output file or not
 
 
->>>>>>> 10cc97b9c9e30be17d7d6bb8b404f6e5aab84a09
-
-print("hello world")
 if __name__ == '__main__':
     modify = ModifyInputFile('../../../input/KDDTrain.csv')
-    modify.add_needed_columns()
+    modify.add_new_columns()
