@@ -60,6 +60,9 @@ class ModifyInputFile(object):
         pass
         # TODO
         # get self.columns_to_check and remove them from the df
+        self.df.drop(labels=self.headers_to_check, axis=1, inplace=True)
+        print(self.df.info())
+
 
     def export_updated_input_file(self, df):
         df.to_csv("../../input/KDDTrainCleaned.csv", sep=',') # csv or txt, not sure yet
@@ -70,3 +73,5 @@ class ModifyInputFile(object):
 if __name__ == '__main__':
     modify = ModifyInputFile('../../../input/KDDTrain.csv')
     modify.add_new_columns()
+    modify.drop_old_columns()
+    
