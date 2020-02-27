@@ -3,7 +3,7 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.{SparkContext, SparkConf}
 
 
-object trainModel extends App {
+object trainModel_kmeans extends App {
   val conf = new SparkConf().setAppName("trainingKmeans").setMaster("local[*]")
   val sc = new SparkContext(conf)
 
