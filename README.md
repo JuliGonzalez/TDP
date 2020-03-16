@@ -1,7 +1,8 @@
-# TDP [Telecommunications Data Proccessing]
+# TDP [Telecommunications Data Processing]
 
 Proyecto de fin de grado de Ingeniería de Computadores para la predicción
 de posibles ataques DoS a una red a través de procesos de Machile Learning.
+
 
 ## Getting Started
 

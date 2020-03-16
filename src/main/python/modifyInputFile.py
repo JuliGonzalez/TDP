@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Script designed to change the structure of the input file to match the
-k-means algorithm criteria
+Naives-Bayes algorithm
 """
 import pandas as pd
 
@@ -50,11 +50,10 @@ class ModifyInputFile(object):
             original_column = self.headers_to_check[index]
             for new_column in column_list:
                 self.df[new_column] = self.df[original_column].apply(lambda x: 1 if x == new_column else 0)
-        print(self.df.info())
-        for col in self.df.columns:
-            print(col)
-        print(self.df.head())
-
+        # print(self.df.info())
+        # for col in self.df.columns:
+        #     print(col)
+        # print(self.df.head())
 
     def drop_old_columns(self):
         pass
@@ -62,7 +61,6 @@ class ModifyInputFile(object):
         # get self.columns_to_check and remove them from the df
         self.df.drop(labels=self.headers_to_check, axis=1, inplace=True)
         print(self.df.info())
-
 
     def export_updated_input_file(self, df):
         df.to_csv("../../input/KDDTrainCleaned.csv", sep=',') # csv or txt, not sure yet
