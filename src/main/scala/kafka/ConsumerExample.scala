@@ -1,12 +1,12 @@
 package kafka
 
 import java.util
-
-import org.apache.kafka.clients.consumer.KafkaConsumer
+import scala.collection.JavaConverters._
 
 object ConsumerExample extends App{
 
   import java.util.Properties
+  import org.apache.kafka.clients.consumer.KafkaConsumer
 
   val TOPIC = "test"
 

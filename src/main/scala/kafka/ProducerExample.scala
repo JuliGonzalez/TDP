@@ -3,7 +3,6 @@ package kafka
 object ProducerExample extends App{
 
   import java.util.Properties
-
   import org.apache.kafka.clients.producer._
 
   val props = new Properties()
