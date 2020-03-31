@@ -1,3 +1,5 @@
+package kafka
+
 object ProducerExample extends App{
 
   import java.util.Properties

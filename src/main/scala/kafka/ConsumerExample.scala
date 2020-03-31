@@ -1,6 +1,8 @@
+package kafka
+
 import java.util
+
 import org.apache.kafka.clients.consumer.KafkaConsumer
-import scala.collection.JavaConverters._
 
 object ConsumerExample extends App{
 

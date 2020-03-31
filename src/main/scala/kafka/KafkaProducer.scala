@@ -1,0 +1,5 @@
+package kafka
+
+object KafkaProducer {
+
+}
