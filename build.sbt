@@ -18,7 +18,5 @@ libraryDependencies ++= Seq(
 
   "org.apache.kafka" % "kafka_2.11" % "1.1.1",
 
-  "io.confluent" % "kafka-avro-serializer" %  "1.0"
+  "io.confluent" % "kafka-avro-serializerr" % "1.0"
 )
-
-resolvers += "confluent" at "https://packages.confluent.io/maven/"
