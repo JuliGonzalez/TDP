@@ -5,9 +5,7 @@ import org.apache.kafka.connect.json.JsonConverter
 import org.apache.kafka.connect.runtime.distributed.{DistributedConfig, DistributedHerder}
 import org.apache.kafka.connect.runtime.rest.RestServer
 import org.apache.kafka.connect.runtime.{Connect, Worker, WorkerConfig}
-import org.apache.kafka.connect.storage.KafkaConfigBackingStore
 import org.apache.kafka.connect.storage.{KafkaConfigStorage, KafkaOffsetBackingStore, StringConverter}
-import org.apache.kafka.trogdor.agent.WorkerManager
 
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
@@ -22,7 +20,7 @@ class Assembly(implicit system: ActorSystem, ec: ExecutionContext){
     WorkerConfig.REST_ADVERTISED_PORT_CONFIG            -> settings.workerPort.toString,
     // TODO
     //  fix class KafkaConfigStorage, find it on maven?
-    KafkaConfigBackingStore.CONFIG_TOPIC_CONFIG         -> settings.workerConfigStorage,
+    KafkaConfigStorage.CONFIG_TOPIC_CONFIG         -> settings.workerConfigStorage,
     KafkaOffsetBackingStore.OFFSET_STORAGE_TOPIC_CONFIG -> settings.workerOffsetStorage,
     WorkerConfig.KEY_CONVERTER_CLASS_CONFIG             -> classOf[StringConverter].getCanonicalName,
     WorkerConfig.INTERNAL_KEY_CONVERTER_CLASS_DOC    -> classOf[StringConverter].getCanonicalName,
