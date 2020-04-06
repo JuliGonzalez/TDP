@@ -1,6 +1,6 @@
 package kafka.sink_connector
 
-import io.confluent.connect.jdbc.JdbcSinkConnector
+//import io.confluent.connect.jdbc.JdbcSinkConnector
 import org.apache.kafka.connect
 
 object SinkConnector extends App{
