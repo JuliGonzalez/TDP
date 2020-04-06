@@ -22,14 +22,15 @@ libraryDependencies ++= Seq(
 
   "org.apache.kafka" % "kafka_2.11" % "1.1.1",
   "org.apache.kafka" % "connect-api" % "2.4.1",
+  "org.apache.kafka" % "connect-transforms" % "2.4.1",
   "org.apache.kafka" % "connect-json" % "2.4.0",
-  "org.apache.kafka" % "connect-runtime" % "2.4.0",
+  "org.apache.kafka" % "connect-runtime" % "0.9.0.0",
   "org.apache.kafka" % "connect-file" % "2.4.0" % "provided",
 
   "io.confluent" % "kafka-avro-serializer" % "1.0",
 
   "com.typesafe" % "config" % "1.3.1",
-  "com.typesafe.akka" % "akka-actor_2.13" % "2.6.4"
+  "com.typesafe.akka" % "akka-actor_2.11" % "2.4.2"
 
 )
 
