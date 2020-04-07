@@ -32,7 +32,12 @@ libraryDependencies ++= Seq(
   "com.agoda" % "kafka-jdbc-connector_2.11" % "1.2.0",
 
   "com.typesafe" % "config" % "1.3.1",
-  "com.typesafe.akka" % "akka-actor_2.11" % "2.4.2"
+  "org.scalaj" % "scalaj-http_2.11" % "2.3.0",
+
+  "com.typesafe.akka" % "akka-actor_2.11" % "2.4.2",
+  "com.typesafe.akka" % "akka-stream_2.11" % "2.4.2",
+
+  "com.softwaremill.reactivekafka" % "reactive-kafka-core_2.11" % "0.10.0"
 
 )
 
