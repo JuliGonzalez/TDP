@@ -1,5 +1,9 @@
 .idea/
-target
+
+/target/scala-2.11/*
+/target/streams
+/target/.history
+
 project
 data
 venv
