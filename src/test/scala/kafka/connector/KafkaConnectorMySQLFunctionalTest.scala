@@ -11,6 +11,7 @@ import com.softwaremill.react.kafka.{ConsumerProperties, ReactiveKafka}
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.reactivestreams.Publisher
+import org.scalatest.tools.Durations
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec}
 
 import scala.collection.mutable.ListBuffer
@@ -37,7 +38,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
                    |	"config" : {
                    |		"tasks.max": "1",
                    |		"connector.class": "com.agoda.kafka.connector.jdbc.JdbcSourceConnector",
-                   |		"connection.url" : "jdbc:mysql://172.23.0.2:3306/test_db?user=root&password=test_pass",
+                   |		"connection.url" : "jdbc:mysql://172.25.0.2:3306/test_db?user=root&password=test_pass",
                    |		"batch.max.rows.variable.name" : "batch",
                    |		"batch.max.rows" : "2",
                    |		"mode" : "timestamp",
@@ -103,7 +104,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
           .runWith(Sink.seq[String]),
         Duration.Inf
       )
-
+      print(messages)
       messages shouldEqual ListBuffer(
         """8 => {"id":8,"change_timestamp":1489383244000}""",
         """9 => {"id":9,"change_timestamp":1489383246000}""",
@@ -171,7 +172,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
       |CREATE PROCEDURE sp_cdc_timestamp (IN _time TIMESTAMP, IN _batch INT)
       |BEGIN
       |	SELECT *
-      |	FROM tempdb.TEST
+      |	FROM test_db.TEST
       |	WHERE change_timestamp > _time
       |	ORDER BY change_timestamp ASC
       | LIMIT _batch;
@@ -184,7 +185,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
       |CREATE PROCEDURE sp_cdc_incrementing (IN _id BIGINT, IN _batch INT)
       |BEGIN
       |	SELECT *
-      |	FROM tempdb.TEST
+      |	FROM test_db.TEST
       |	WHERE id > _id
       |	ORDER BY id ASC
       | LIMIT _batch;
@@ -197,7 +198,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
       |CREATE PROCEDURE sp_cdc_timestamp_incrementing (_time TIMESTAMP, _id BIGINT, _batch INT)
       |BEGIN
       |	SELECT *
-      |	FROM tempdb.TEST
+      |	FROM test_db.TEST
       |	WHERE
       |		(change_timestamp > _time)
       |		OR
@@ -211,7 +212,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
   lazy private val deserializer = new StringDeserializer()
 
   override def beforeAll(): Unit = {
-    val dbUrl = "jdbc:mysql://172.23.0.2:3306/test_db?user=root&password=test_pass"
+    val dbUrl = "jdbc:mysql://172.25.0.2:3306/test_db?user=root&password=test_pass"
     db = DriverManager.getConnection(dbUrl)
     val UTC_Calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
     insertData.setTimestamp(1,  new Timestamp(1489383225000L), UTC_Calendar)
