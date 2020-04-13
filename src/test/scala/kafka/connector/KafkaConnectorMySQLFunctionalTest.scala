@@ -30,14 +30,14 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
 
   "Kafka Connect in Timestamp mode" should {
     "should stream data into kafka" in {
-      val url = "http://localhost:8083/connectors"
+      val url = "http://127.0.0.1:8083/connectors"
       val data = """
                    |{
                    |	"name" : "timestamp_mysql",
                    |	"config" : {
                    |		"tasks.max": "1",
                    |		"connector.class": "com.agoda.kafka.connector.jdbc.JdbcSourceConnector",
-                   |		"connection.url" : "jdbc:mysql://mysql:3306/tempdb?user=root&password=test_pass",
+                   |		"connection.url" : "jdbc:mysql://172.23.0.2:3306/test_db?user=root&password=test_pass",
                    |		"batch.max.rows.variable.name" : "batch",
                    |		"batch.max.rows" : "2",
                    |		"mode" : "timestamp",
@@ -80,7 +80,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
                    |	"config" : {
                    |		"tasks.max": "1",
                    |		"connector.class": "com.agoda.kafka.connector.jdbc.JdbcSourceConnector",
-                   |		"connection.url" : "jdbc:mysql://mysql:3306/tempdb?user=root&password=Passw0rd",
+                   |		"connection.url" : "dbc:mysql://172.23.0.2:3306/test_db?user=root&password=test_pass",
                    |		"batch.max.rows.variable.name" : "batch",
                    |		"batch.max.rows" : "2",
                    |		"mode" : "incrementing",
@@ -121,7 +121,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
                    |	"config" : {
                    |		"tasks.max": "1",
                    |		"connector.class": "com.agoda.kafka.connector.jdbc.JdbcSourceConnector",
-                   |		"connection.url" : "jdbc:mysql://mysql:3306/tempdb?user=root&password=Passw0rd",
+                   |		"connection.url" : "jdbc:mysql://mysql:3306/tempdb?user=test&password=pass",
                    |		"batch.max.rows.variable.name" : "batch",
                    |		"batch.max.rows" : "2",
                    |		"mode" : "timestamp+incrementing",
@@ -211,10 +211,10 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
   lazy private val deserializer = new StringDeserializer()
 
   override def beforeAll(): Unit = {
-    val dbUrl = "jdbc:mysql://localhost:3306/tempdb?user=root&password=test_pass"
+    val dbUrl = "jdbc:mysql://172.23.0.2:3306/test_db?user=root&password=test_pass"
     db = DriverManager.getConnection(dbUrl)
     val UTC_Calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-    nsertData.setTimestamp(1,  new Timestamp(1489383225000L), UTC_Calendar)
+    insertData.setTimestamp(1,  new Timestamp(1489383225000L), UTC_Calendar)
     insertData.setTimestamp(2,  new Timestamp(1489383229000L), UTC_Calendar)
     insertData.setTimestamp(3,  new Timestamp(1489383231000L), UTC_Calendar)
     insertData.setTimestamp(4,  new Timestamp(1489383231000L), UTC_Calendar)

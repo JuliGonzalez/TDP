@@ -21,25 +21,30 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-mllib" % "2.0.0",
 
   "org.apache.kafka" % "kafka_2.11" % "0.9.0.0",
-  "org.apache.kafka" % "connect-api" % "0.9.0.0",
+  //"org.apache.kafka" % "connect-api" % "0.9.0.0",
   //"org.apache.kafka" % "connect-transforms" % "0.9.0.0",
   "org.apache.kafka" % "connect-json" % "0.9.0.0",
-  "org.apache.kafka" % "connect-runtime" % "0.9.0.1",
-  "org.apache.kafka" % "connect-file" % "0.9.0.0" % "provided",
+  "org.apache.kafka" % "connect-runtime" % "0.9.0.0",
+  //"org.apache.kafka" % "connect-file" % "0.9.0.0" % "provided",
 
-  "io.confluent" % "kafka-avro-serializer" % "1.0",
+  //"io.confluent" % "kafka-avro-serializer" % "1.0",
 
   "com.agoda" % "kafka-jdbc-connector_2.11" % "1.2.0",
 
+  "mysql" % "mysql-connector-java" % "8.0.19",
+
   "com.typesafe" % "config" % "1.3.1",
+  //"com.typesafe" % "scala-logging" % "3.5.0",
+
   "org.scalaj" % "scalaj-http_2.11" % "2.3.0",
 
-  "com.typesafe.akka" % "akka-actor_2.11" % "2.4.2",
-  "com.typesafe.akka" % "akka-stream_2.11" % "2.4.2",
+  "com.typesafe.akka" % "akka-actor_2.11" % "2.4.17",
+  //"com.typesafe.akka" % "akka-stream_2.11" % "2.4.17",
 
   "com.softwaremill.reactivekafka" % "reactive-kafka-core_2.11" % "0.10.0"
+).map(_.exclude("org.slf4j","slf4j-log4j12"))
 
-)
+
 
 lazy val root = (project in file(".")).
   settings(resolvers ++= repositories)
