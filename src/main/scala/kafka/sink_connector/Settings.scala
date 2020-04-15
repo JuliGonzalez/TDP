@@ -3,6 +3,7 @@ package kafka.sink_connector
 import com.typesafe.config.ConfigFactory
 
 import scala.collection.JavaConverters._
+import com.agoda.kafka.connector.jdbc.JdbcSourceConnector
 
 class Settings {
   private val config = ConfigFactory.load()

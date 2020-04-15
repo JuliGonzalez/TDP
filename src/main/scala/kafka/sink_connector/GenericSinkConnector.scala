@@ -2,23 +2,21 @@ package kafka.sink_connector
 
 import java.util
 import java.util.Properties
+import java.sql.{Connection, DriverManager, Timestamp}
 
 import org.apache.kafka.clients.consumer.OffsetAndMetadata
 import org.apache.kafka.common.TopicPartition
-import org.apache.kafka.connect.sink.{SinkConnector, SinkRecord, SinkTask}
+import org.apache.kafka.connect.sink.{SinkConnector, SinkRecord, SinkTask, SinkTaskContext}
 import org.slf4j.Logger
 
-object GenericSinkConnector extends SinkTask{
+abstract class  GenericSinkConnector extends SinkTask{
   var log: Logger = _
+  var db: Connection = _
+  var ip_addr: String = "localhost"
+  val dbUrl: String = "jdbc:mysql://"+ ip_addr + ":3306/test_db?user=root&password=test_pass"
+  db = DriverManager.getConnection(dbUrl)
 
-
-  val task: SinkTask =  null
-  val props = new Properties()
-
-  props.put("bootstrap.servers", "localhost:9092")
-  props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-  props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-  props.put("group.id", "sink_connect")
+  override def initialize(context: SinkTaskContext): Unit = super.initialize(context)
 
   override def put(records: util.Collection[SinkRecord]): Unit = {
     if(records.isEmpty) {
@@ -28,11 +26,9 @@ object GenericSinkConnector extends SinkTask{
     print(recordCount)
   }
 
-  override def start(props: util.Map[String, String]): Unit = ???
-
   override def flush(offsets: util.Map[TopicPartition, OffsetAndMetadata]): Unit = ???
 
-  override def stop(): Unit = ???
+  override def stop(): Unit = db.close()
 
-  override def version(): String = ???
+  override def version(): String = getClass.getPackage.getImplementationVersion
 }
