@@ -1,4 +1,4 @@
-package kafka.config.Personal
+package kafka.config.personal
 
 import com.sap.kafka.client.hana.HANAConfigMissingException
 import kafka.config.{BaseConfig, BaseConfigConstants}

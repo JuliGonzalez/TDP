@@ -1,4 +1,4 @@
-package kafka.config.Personal
+package kafka.config.personal
 
 import java.util
 

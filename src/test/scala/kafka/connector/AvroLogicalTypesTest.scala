@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 
 import kafka.sink_connector.PersonalSinkTask
-import kafka.config.Personal.PersonalParameters
+import kafka.config.personal.PersonalParameters
 import org.apache.kafka.connect.data._
 import org.apache.kafka.connect.sink.{SinkRecord, SinkTaskContext}
 import org.scalatest.FunSuite
