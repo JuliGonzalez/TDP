@@ -26,6 +26,8 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
   var publisherIncrementing: Publisher[ConsumerRecord[String, String]] = _
   var publisherTimestampIncrementing: Publisher[ConsumerRecord[String, String]] = _
 
+  private val ip_addr: String = "172.18.0.2"
+
   implicit val system = ActorSystem("functional-test")
   implicit val materializer = ActorMaterializer()
 
@@ -38,7 +40,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
                    |	"config" : {
                    |		"tasks.max": "1",
                    |		"connector.class": "com.agoda.kafka.connector.jdbc.JdbcSourceConnector",
-                   |		"connection.url" : "jdbc:mysql://172.25.0.2:3306/test_db?user=root&password=test_pass",
+                   |		"connection.url" : "jdbc:mysql://172.18.0.2:3306/test_db?user=root&password=test_pass",
                    |		"batch.max.rows.variable.name" : "batch",
                    |		"batch.max.rows" : "2",
                    |		"mode" : "timestamp",
@@ -212,7 +214,7 @@ class KafkaConnectorMySQLFunctionalTest extends WordSpec with Matchers with Befo
   lazy private val deserializer = new StringDeserializer()
 
   override def beforeAll(): Unit = {
-    val dbUrl = "jdbc:mysql://172.25.0.2:3306/test_db?user=root&password=test_pass"
+    val dbUrl = "jdbc:mysql://"+ ip_addr + ":3306/test_db?user=root&password=test_pass"
     db = DriverManager.getConnection(dbUrl)
     val UTC_Calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
     insertData.setTimestamp(1,  new Timestamp(1489383225000L), UTC_Calendar)
