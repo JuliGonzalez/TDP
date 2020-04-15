@@ -12,7 +12,7 @@ object ProducerExample extends App{
 
   val producer = new KafkaProducer[String, String](props)
 
-  val TOPIC = "test"
+  val TOPIC = "change-tracker-config"
   for (i <- -1 to 59){
     val record = new ProducerRecord(TOPIC, "key", s"Hello $i")
     producer.send(record)
