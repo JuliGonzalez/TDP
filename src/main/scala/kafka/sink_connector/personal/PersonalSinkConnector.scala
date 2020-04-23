@@ -41,5 +41,5 @@ class PersonalSinkConnector extends SinkConnector{
   override def stop(): Unit = {}
   override def version(): String = getClass.getPackage.getImplementationVersion
 
-  override def config(): ConfigDef = new ConfigDef
+  def config(): ConfigDef = new ConfigDef //TODO: change to override method!
 }

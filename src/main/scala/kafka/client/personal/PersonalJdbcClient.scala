@@ -14,10 +14,10 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.util.{Failure, Success, Try}
 
-case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
+case class PersonalJdbcClient(personalConfiguration: PersonalConfig)  {
   private val log: Logger = LoggerFactory.getLogger(classOf[PersonalJdbcClient])
 
-  protected val driver: String = "com.sap.db.jdbc.Driver"
+  protected val driver: String = "com.sap.db.jdbc.Driver" //TODO: change this driver
 
   private val CONNECTION_FAIL_R = ".*Failed to open connection.*".r
 
@@ -41,7 +41,7 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
    * @param tableName The table name
    * @return the fully qualified table name
    */
-  protected def tableWithNamespace(namespace: Option[String], tableName: String) =
+  protected def tableWithNamespace(namespace: Option[String], tableName: String): String =
     namespace match {
       case Some(value) => s""""$value"."$tableName""""
       case None => tableName
@@ -54,7 +54,7 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
    * @return The HANA JDBC connection URL
    */
   protected def jdbcUrl: String = {
-    hanaConfiguration.connectionUrl
+    personalConfiguration.connectionUrl
   }
 
   /**
@@ -66,8 +66,8 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
    def getConnection: Connection = {
      ExecuteWithExceptions[Connection, PersonalConnectorException, PersonalJdbcConnectionException] (
       new PersonalJdbcConnectionException("Cannot acquire a connection")) { () =>
-       val connectionUser: String = hanaConfiguration.connectionUser
-       val connectionPassword: String = hanaConfiguration.connectionPassword
+       val connectionUser: String = personalConfiguration.connectionUser
+       val connectionPassword: String = personalConfiguration.connectionPassword
 
        Class.forName(driver)
        Try(DriverManager.getConnection(jdbcUrl, connectionUser, connectionPassword))

@@ -4,12 +4,13 @@ import java.util
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 
-import kafka.config.personal.PersonalParameters
+import kafka.sink_connector.config.personal.PersonalParameters
 import kafka.sink_connector.personal.PersonalSinkTask
 import org.apache.kafka.connect.data._
 import org.apache.kafka.connect.sink.{SinkRecord, SinkTaskContext}
 import org.scalatest.FunSuite
 import org.mockito.Mockito.mock
+import kafka.MockJdbcClient
 
 class AvroLogicalTypesTest extends FunSuite{
   test("put propagates to DB with schema containing data fields") {

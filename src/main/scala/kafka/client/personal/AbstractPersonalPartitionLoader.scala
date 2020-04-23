@@ -24,10 +24,10 @@ trait AbstractPersonalPartitionLoader {
   /**
    * Provides a [[PersonalJdbcClient]] implementation used for the partitions loading.
    *
-   * @param hanaConfiguration The HANA connection configuration
+   * @param personalConfiguration The HANA connection configuration
    * @return a [[PersonalJdbcClient]] implementation
    */
-  def getHANAJdbcClient(hanaConfiguration: PersonalConfig): PersonalJdbcClient
+  def getPersonalJdbcClient(personalConfiguration: PersonalConfig): PersonalJdbcClient
 
   /**
    * Loads a partition of a DataFrame to the HANA backend. This is done in
