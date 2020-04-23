@@ -1,19 +1,21 @@
 package kafka.sink_connector
 import java.util
+
+import kafka.config.personal.PersonalConfig
 import kafka.sink_connector.{BaseWriter, GenericSinkConnector}
 import org.slf4j.LoggerFactory
 
 
-class PersonalSinkTask extends GenericSinkConnector{
+class PersonalSinkTask extends GenerickSinkTask{
   log = LoggerFactory.getLogger(classOf[HANASinkTask])
-  private val tableCache = scala.collection.mutable.Map[String, HANASinkRecordsCollector]()
+  private val tableCache = scala.collection.mutable.Map[String, PersonalSinkCollectorsRecord]()
   var hanaClient: HANAJdbcClient = _
 
   override def start(props: util.Map[String, String]): Unit = {
     log.info("Starting Kafka-Connect task")
     config = HANAParameters.getConfig(props)
-    hanaClient = new HANAJdbcClient(config.asInstanceOf[HANAConfig])
-    initWriter(config.asInstanceOf[HANAConfig])
+    hanaClient = new HANAJdbcClient(config.asInstanceOf[PersonalConfig])
+    initWriter(config.asInstanceOf[PersonalConfig])
   }
 
   override def initWriter(config: BaseConfig): BaseWriter = {
