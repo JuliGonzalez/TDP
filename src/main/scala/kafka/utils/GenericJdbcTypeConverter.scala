@@ -3,7 +3,7 @@ package kafka.utils
 import java.sql.{PreparedStatement, ResultSetMetaData}
 import java.text.SimpleDateFormat
 
-import kafka.client.metaAttr
+import kafka.client.MetaAttr
 import org.apache.kafka.connect.data._
 import org.slf4j.LoggerFactory
 
@@ -59,7 +59,7 @@ trait GenericJdbcTypeConverter {
     * @return A sequence of setter functions which argument is the value to be set
     *         of the type [[Any]]
     */
-  def getSinkRowDatatypesSetters(datatypes: Seq[metaAttr], stmt: PreparedStatement):
+  def getSinkRowDatatypesSetters(datatypes: Seq[MetaAttr], stmt: PreparedStatement):
   Seq[(Any) => Unit] = datatypes.zipWithIndex.map({case (t, i) => t.dataType match {
     case java.sql.Types.BOOLEAN => (value: Any) => stmt.setBoolean(i + 1, value.asInstanceOf[Boolean])
     case java.sql.Types.BIT => (value: Any) => stmt.setBoolean(i + 1, value.asInstanceOf[Boolean])
@@ -126,7 +126,7 @@ trait GenericJdbcTypeConverter {
     * @param datatypes sequence containing metadata for table
     * @return kafka schema
     */
-  def convertJdbcMetadataToSchema(tableName: String, datatypes: Seq[metaAttr]): Schema = {
+  def convertJdbcMetadataToSchema(tableName: String, datatypes: Seq[MetaAttr]): Schema = {
     val builder = org.apache.kafka.connect.data.SchemaBuilder.struct().name(tableName
       .replaceAll("[^\\w\\s]", "").toLowerCase)
     for ( i <- 1 to datatypes.size) {
@@ -135,7 +135,7 @@ trait GenericJdbcTypeConverter {
     builder.build()
   }
 
-  private def addFieldSchema(datatypes: Seq[metaAttr], col: Int,
+  private def addFieldSchema(datatypes: Seq[MetaAttr], col: Int,
                              builder: org.apache.kafka.connect.data.SchemaBuilder): Unit = {
     val fieldname = datatypes(col).name
     val sqlType = datatypes(col).dataType

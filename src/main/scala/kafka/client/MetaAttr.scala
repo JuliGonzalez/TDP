@@ -3,7 +3,7 @@ package kafka.client
 import org.apache.kafka.connect.data.Field
 
 // It overrides a JDBC class - keep it starting with lowercase
-case class metaAttr(
+case class MetaAttr(
     name: String,
     dataType: Int,
     isNullable: Int,
@@ -11,4 +11,4 @@ case class metaAttr(
     scale: Int,
     isSigned: Boolean)
 
-case class MetaSchema(var fields: Seq[metaAttr], var avroFields: Seq[Field])
+case class MetaSchema(var fields: Seq[MetaAttr], var avroFields: Seq[Field])

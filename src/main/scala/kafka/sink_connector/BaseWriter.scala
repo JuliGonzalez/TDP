@@ -11,11 +11,11 @@ abstract class BaseWriter {
   private var log: Logger = LoggerFactory.getLogger(getClass)
   private var connection: Connection = null
 
-  protected[sink] def initializeConnection(): Unit
+  protected[sink_connector] def initializeConnection(): Unit
 
-  protected[sink] def write(records: util.Collection[SinkRecord]): Unit
+  protected[sink_connector] def write(records: util.Collection[SinkRecord]): Unit
 
-  private[sink] def close(): Unit = {
+  private[sink_connector] def close(): Unit = {
     if(connection != null) {
       try{
         connection.close()

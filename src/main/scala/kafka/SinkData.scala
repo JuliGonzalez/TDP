@@ -15,6 +15,6 @@ object SinkData extends App{
   props.put("group.id", "sink_connector_test")
 
 
-  sink.initialize(SinkTaskContext)
-  sink.start(props)
+  //sink.initialize(SinkTaskContext)
+  //sink.start(props)
 }

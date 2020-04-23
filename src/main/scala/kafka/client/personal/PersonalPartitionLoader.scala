@@ -1,6 +1,6 @@
 package kafka.client.personal
 
-import com.sap.kafka.connect.config.hana.HANAConfig
+import kafka.sink_connector.config.personal.PersonalConfig
 
 /**
  * The [[AbstractPersonalPartitionLoader]] which uses [[PersonalJdbcClient]].
@@ -8,7 +8,7 @@ import com.sap.kafka.connect.config.hana.HANAConfig
 object PersonalPartitionLoader extends AbstractPersonalPartitionLoader {
 
   /** @inheritdoc */
-  def getHANAJdbcClient(hanaConfiguration: HANAConfig): PersonalJdbcClient =
-    new PersonalJdbcClient(hanaConfiguration)
+  def getPersonalJdbcClient(personalConfiguration: PersonalConfig): PersonalJdbcClient =
+    new PersonalJdbcClient(personalConfiguration)
 
 }

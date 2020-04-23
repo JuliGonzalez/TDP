@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.google.common.base.Preconditions
 
 import kafka.client.MetaSchema
-import kafka.config.personal.PersonalConfig
+import kafka.sink_connector.config.personal.PersonalConfig
 import kafka.utils.WithCloseables
 import kafka.utils.personal.PersonalJdbcTypeConverter
 
@@ -209,7 +209,7 @@ trait AbstractPersonalPartitionLoader {
    * @param metaSchema The Metadata schema
    * @return The prepared INSERT INTO statement as a [[String]]
    */
-  private[hana] def prepareInsertIntoStmt(fullTableName: String, metaSchema: MetaSchema): String = {
+  private[personal] def prepareInsertIntoStmt(fullTableName: String, metaSchema: MetaSchema): String = {
     val fields = metaSchema.fields
     val columnNames = fields.map(field => s""""${field.name}"""").mkString(", ")
     val placeHolders = fields.map(field => s"""?""").mkString(", ")
@@ -223,7 +223,7 @@ trait AbstractPersonalPartitionLoader {
     * @param metaSchema The Metadata schema
     * @return The prepared INSERT INTO statement as a [[String]]
     */
-  private[hana] def prepareInsertIntoCollStmt(collectionName: String, recordMap: Map[String, AnyRef]): String = {
+  private[personal] def prepareInsertIntoCollStmt(collectionName: String, recordMap: Map[String, AnyRef]): String = {
     val mapper = new ObjectMapper()
     mapper.registerModule(DefaultScalaModule)
     log.info(s"""INSERT INTO $collectionName VALUES ('${mapper.writeValueAsString(recordMap)}')""")

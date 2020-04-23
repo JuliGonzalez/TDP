@@ -1,7 +1,7 @@
-package kafka.config.personal
+package kafka.sink_connector.config.personal
 
-import com.sap.kafka.client.hana.HANAConfigMissingException
-import kafka.config.{BaseConfig, BaseConfigConstants}
+import kafka.client.personal.PersonalConfigMissingException
+import kafka.sink_connector.config.{BaseConfig, BaseConfigConstants}
 
 case class PersonalConfig(props: Map[String, String]) extends BaseConfig(props: Map[String, String]){
 
@@ -28,13 +28,13 @@ case class PersonalConfig(props: Map[String, String]) extends BaseConfig(props: 
         else if (value == BaseConfigConstants.COLLECTION_TABLE_TYPE)
           topicPropMap.put("table.type", value)
         else
-          throw new HANAConfigMissingException(
+          throw new PersonalConfigMissingException(
             "Value specified is incorrect for 'table.type' parameter")
       }
     }
 
     if (topicPropMap.get("table.name").isEmpty && topicPropMap.get("query").isEmpty) {
-      throw new HANAConfigMissingException("A table name must be specified for HANA-Kafka " +
+      throw new PersonalConfigMissingException("A table name must be specified for HANA-Kafka " +
         "connectors to work")
     }
 
@@ -48,7 +48,7 @@ case class PersonalConfig(props: Map[String, String]) extends BaseConfig(props: 
 
     if (topicPropMap.get("incrementing.column.name").isEmpty &&
       (mode == BaseConfigConstants.MODE_INCREMENTING)) {
-      throw new HANAConfigMissingException(s"With mode as ${BaseConfigConstants.MODE_INCREMENTING}" +
+      throw new PersonalConfigMissingException(s"With mode as ${BaseConfigConstants.MODE_INCREMENTING}" +
         s" an incrementing column must be specified")
     }
 

@@ -1,10 +1,8 @@
-package kafka.client
+package kafka.client.personal
 
 package object personalClient {
-
   // Variables from the spark context have to be prefixed by
   protected[personalClient] val CONF_PREFIX = "spark.personal."
-
   protected[personalClient] val PARAMETER_PATH = "tablepath"
   protected[personalClient] val PARAMETER_DBSCHEMA = "dbschema"
   protected[personalClient] val PARAMETER_HOST = "host"
@@ -35,6 +33,4 @@ package object personalClient {
   protected[personalClient] val CONSTANT_STORAGE_TYPE  = "STORAGE_TYPE"
   protected[personalClient] val CONSTANT_COLUMN_STORE  = "COLUMN STORE"
   protected[personalClient] val CONSTANT_ROW_STORE  = "ROW STORE"
-
-
 }

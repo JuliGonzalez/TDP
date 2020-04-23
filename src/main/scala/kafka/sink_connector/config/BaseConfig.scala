@@ -1,4 +1,4 @@
-package kafka.config
+package kafka.sink_connector.config
 
 
 abstract class BaseConfig(props: Map[String, String]) {

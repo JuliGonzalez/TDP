@@ -2,9 +2,9 @@ package kafka.client.personal
 
 import java.sql.{Connection, DriverManager, ResultSet}
 
-import kafka.client.{ColumnRow, MetaSchema, personal, metaAttr}
-import kafka.config.personal.PersonalConfig
-import kafka.config.{BaseConfigConstants, BaseParameters}
+import kafka.client.{ColumnRow, MetaSchema, personal, MetaAttr}
+import kafka.sink_connector.config.personal.PersonalConfig
+import kafka.sink_connector.config.{BaseConfigConstants, BaseParameters}
 import kafka.utils.personal.PersonalSchemaBuilder
 import kafka.utils.{ExecuteWithExceptions, WithCloseables}
 
@@ -87,10 +87,10 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
    *
    * @param tableName The table name
    * @param namespace The table namespace
-   * @return A sequence of [[metaAttr]] objects (JDBC representation of the schema)
+   * @return A sequence of [[MetaAttr]] objects (JDBC representation of the schema)
    */
-   def getMetaData(tableName: String, namespace: Option[String]): Seq[metaAttr] = {
-     ExecuteWithExceptions[Seq[metaAttr], Exception, PersonalJdbcException](
+   def getMetaData(tableName: String, namespace: Option[String]): Seq[MetaAttr] = {
+     ExecuteWithExceptions[Seq[MetaAttr], Exception, PersonalJdbcException](
       new PersonalJdbcException(s"Fetching of metadata for $tableName failed")) { () =>
        val fullTableName = tableWithNamespace(namespace, tableName)
        WithCloseables(getConnection) { conn =>
@@ -98,7 +98,7 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
            WithCloseables(stmt.executeQuery(s"SELECT * FROM $fullTableName LIMIT 0")) { rs =>
              val metadata = rs.getMetaData
              val columnCount = metadata.getColumnCount
-             (1 to columnCount).map(col => metaAttr(
+             (1 to columnCount).map(col => MetaAttr(
                metadata.getColumnName(col), metadata.getColumnType(col),
                metadata.isNullable(col), metadata.getPrecision(col),
                metadata.getScale(col), metadata.isSigned(col)))
@@ -114,8 +114,8 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
     * @param query The SQL Query string
     * @return A sequence of [[metaAttr]] objects (JDBC representation of the schema)
     */
-  def getMetadata(query: String): Seq[metaAttr] = {
-    ExecuteWithExceptions[Seq[metaAttr], Exception, PersonalJdbcException](
+  def getMetadata(query: String): Seq[MetaAttr] = {
+    ExecuteWithExceptions[Seq[MetaAttr], Exception, PersonalJdbcException](
       new PersonalJdbcException(s"Fetching of metadata for $query failed")) { () =>
         val fullQueryForMetadata = query + " LIMIT 0"
         WithCloseables(getConnection) { conn =>
@@ -123,7 +123,7 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
             WithCloseables(stmt.executeQuery(fullQueryForMetadata)) { rs =>
               val metadata = rs.getMetaData
               val columnCount = metadata.getColumnCount
-              (1 to columnCount).map(col => metaAttr(
+              (1 to columnCount).map(col => MetaAttr(
                 metadata.getColumnName(col), metadata.getColumnType(col),
                 metadata.isNullable(col), metadata.getPrecision(col),
                 metadata.getScale(col), metadata.isSigned(col)))
@@ -358,7 +358,7 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
      ExecuteWithExceptions[Unit, Exception, PersonalJdbcException] (
       new PersonalJdbcException(s"loading data into $tableName is not successful")) { () =>
        val fullTableName = tableWithNamespace(namespace, tableName)
-       HANAPartitionLoader.loadPartition(connection, fullTableName, records.iterator, schema, batchSize)
+       PersonalPartitionLoader.loadPartition(connection, fullTableName, records.iterator, schema, batchSize)
      }
   }
 
@@ -367,9 +367,9 @@ case class PersonalJdbcClient(hanaConfiguration: PersonalConfig)  {
                schema: MetaSchema,
                records: Seq[SinkRecord],
                batchSize: Int): Unit = {
-    ExecuteWithExceptions[Unit, Exception, HANAJdbcException] (
+    ExecuteWithExceptions[Unit, Exception, PersonalJdbcException] (
       new PersonalJdbcException(s"loading data into $collectionName is not successful")) { () =>
-      HANAPartitionLoader.loadPartitionForJsonStore(connection, collectionName, records.iterator, schema, batchSize)
+      PersonalPartitionLoader.loadPartitionForJsonStore(connection, collectionName, records.iterator, schema, batchSize)
     }
   }
 

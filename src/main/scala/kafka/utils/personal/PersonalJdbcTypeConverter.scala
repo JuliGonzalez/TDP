@@ -1,6 +1,6 @@
 package kafka.utils.personal
 
-import kafka.client.metaAttr
+import kafka.client.MetaAttr
 import kafka.utils.GenericJdbcTypeConverter
 
 import org.apache.kafka.connect.data.Schema.Type
@@ -22,6 +22,6 @@ object PersonalJdbcTypeConverter extends GenericJdbcTypeConverter {
     * @param datatypes sequence containing metadata for table
     * @return kafka schema
     */
-  def convertHANAMetadataToSchema(tableName: String, datatypes: Seq[metaAttr]): Schema =
+  def convertHANAMetadataToSchema(tableName: String, datatypes: Seq[MetaAttr]): Schema =
     super.convertJdbcMetadataToSchema(tableName, datatypes)
 }
