@@ -23,7 +23,7 @@ class AvroLogicalTypesTest extends FunSuite{
     props.put("connection.user", "root")
     props.put("connection.password", "pass_test")
     props.put("topics", "test")
-    props.put("testTopic.table.name", "\"TEST\".\"DATE_TABLE\"")
+    props.put("testTopic.table.name", "\"TEST1\".\"DATE_TABLE\"")
     props.put("testTopic.table.type", "row")
     props.put("auto.create", "true")
     props.put("testTopic.pk.mode", "record_value")

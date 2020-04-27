@@ -8,7 +8,7 @@ object ConsumerExample extends App{
   import java.util.Properties
   import org.apache.kafka.clients.consumer.KafkaConsumer
 
-  val TOPIC = "change-tracker-config"
+  val TOPIC = "test-tomysql"
 
   val props = new Properties()
 
