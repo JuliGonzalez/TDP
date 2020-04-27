@@ -7,5 +7,7 @@ scalaVersion := "2.11.8"
 val sparkVersion = "1.6.1"
 
 resolvers += "confluent" at "https://packages.confluent.io/maven/"
+resolvers += Resolver.bintrayRepo("cakesolutions", "maven")
 
-libraryDependencies ++= Dependencies.Compile.kafkaConnect
+
+  libraryDependencies ++= Dependencies.Compile.kafkaConnect
