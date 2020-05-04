@@ -10,4 +10,12 @@ resolvers += "confluent" at "https://packages.confluent.io/maven/"
 resolvers += Resolver.bintrayRepo("cakesolutions", "maven")
 
 
-  libraryDependencies ++= Dependencies.Compile.kafkaConnect
+libraryDependencies ++= Dependencies.Compile.kafkaConnect
+
+dependencyOverrides ++= {
+  Seq(
+    "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.6.7.1",
+    "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.7",
+    "com.fasterxml.jackson.core" % "jackson-core" % "2.6.7"
+  )
+}
