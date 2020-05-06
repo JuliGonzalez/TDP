@@ -24,7 +24,8 @@ object KafkaExampleAvro extends App {
       val deviceID = getMeasurement(0, 10)
       val timestamp = DateTime.now().getMillis
 
-      Try(producer.produce("test-tomysql", Key(deviceID), DeviceMeasurements(deviceID, deviceMeasurement, "", timestamp))) match {
+      Try(producer.produce("test-tomysql", Key(deviceID), DeviceMeasurements(deviceID, deviceMeasurement, "normal", timestamp)))
+      match {
         case Success(m) =>
           val metadata = m.get()
           println("Success writing to Kafka topic:" + metadata.topic(),
