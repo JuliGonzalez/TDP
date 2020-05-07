@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 
 
 class ModifyInputFile(object):
@@ -81,6 +82,7 @@ class ModifyInputFile(object):
         classifier = GaussianNB(priors=None, var_smoothing=1e-09)
         clf = classifier.fit(X_train, y_train)
         pred = clf.predict(X_test)
+        print("accurancy score:", accuracy_score(y_test, pred))
         cm = confusion_matrix(y_test, pred)
         print(cm)
 
