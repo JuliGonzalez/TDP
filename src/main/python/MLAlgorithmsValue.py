@@ -21,9 +21,7 @@ plt.rcdefaults()
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.externals.six import StringIO
-from IPython.display import Image
 from sklearn.tree import export_graphviz
-import pydotplus
 import pydot
 
 # import dataset
