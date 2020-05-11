@@ -1,4 +1,4 @@
-package spark
+package sparkStreaming
 
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient
 import io.confluent.kafka.serializers.KafkaAvroDeserializer

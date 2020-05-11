@@ -3,6 +3,10 @@ import numpy as np
 import sys
 import sklearn
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn import preprocessing
+from sklearn.feature_selection import SelectPercentile, f_classif
+from sklearn.feature_selection import RFE
+from sklearn.tree import DecisionTreeClassifier
 
 
 class FeatureSelection(object):
@@ -140,6 +144,40 @@ class FeatureSelection(object):
         # print('Dimensions of Probe:', Probe_df_test.shape)
         # print('Dimensions of R2L:', R2L_df_test.shape)
         # print('Dimensions of U2R:', U2R_df_test.shape)
+        return DoS_df, DoS_df_test, Probe_df,  Probe_df_test, R2L_df, R2L_df_test, U2R_df, U2R_df_test
+
+    def feature_scaling(self, df):
+        x_df = df.drop('label', 1)
+        y_df = df.label
+        return x_df, y_df
+
+    def scale_dataframes_standard_scaler(self, df):
+        scaler1 = preprocessing.StandardScaler().fit(df)
+        _df = scaler1.transform(df)
+        return _df
+
+    def feature_selection(self, x_df, y_df, column_names):
+        np.seterr(divide='ignore', invalid='ignore')
+        selector = SelectPercentile(f_classif, percentile=10)
+        x_new_df = selector.fit_transform(x_df, y_df)
+        print(x_new_df.shape)
+        true = selector.get_support()
+        newcolindex_df = [i for i, x in enumerate(true) if x]
+        newcolname_df = list(column_names[i] for i in newcolindex_df)
+        return newcolname_df
+
+    def apply_recursive_feature_elimination(self, x_df, y_df, column_names):
+        clf = DecisionTreeClassifier(random_state=0)
+        rfe = RFE(estimator=clf,  n_features_to_select=13, step=1)
+        rfe.fit(x_df, y_df)
+        X_rfeDoS = rfe.transform(x_df)
+        true = rfe.support_
+        rfecolindex_df = [i for i, x in enumerate(true) if x]
+        rfcolname_df = list(column_names[i] for i in rfecolindex_df)
+        return X_rfeDoS, rfcolname_df
+
+    def export_to_csv(self, df, _path):
+        df.to_csv(path_or_buf=_path, sep=',', header=False, index=False)
 
 
 if __name__ == "__main__":
@@ -147,4 +185,23 @@ if __name__ == "__main__":
     feature.show_info_from_dfs()
     df_cat_data, test_df_cat_data = feature.transform_df_to_non_categorical()
     newdf, newdf_test = feature.join_non_categorical_with_categorical_dataframes(df_cat_data, test_df_cat_data)
-    feature.split_dataframes_in_attack_categories(newdf, newdf_test)
+    DoS_df, DoS_df_test, _, _, _, _, _, _ = feature.split_dataframes_in_attack_categories(newdf, newdf_test)
+    X_DoS,  Y_DoS = feature.feature_scaling(DoS_df)
+    X_DoS_test, Y_DoS_test = feature.feature_scaling(DoS_df_test)
+    colNames = list(X_DoS)
+    colNames_test = list(X_DoS_test)
+    X_DoS = feature.scale_dataframes_standard_scaler(X_DoS)
+    print(X_DoS.std(axis=0))
+    new_colsDoS = feature.feature_selection(X_DoS, Y_DoS, colNames)
+    print('Features selected for DoS:', new_colsDoS)
+    print()
+    Dos_new_df, new_rfecolsDos = feature.apply_recursive_feature_elimination(X_DoS, Y_DoS, colNames)
+    print('Features selected for DoS:', new_rfecolsDos)
+    print()
+    pd_df = pd.DataFrame(data=Dos_new_df)
+    print(pd_df.head())
+    print()
+    print(Y_DoS.head())
+    feature.export_to_csv(pd_df, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified.csv")
+
+

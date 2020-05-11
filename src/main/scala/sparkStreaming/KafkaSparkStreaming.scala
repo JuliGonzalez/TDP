@@ -1,19 +1,21 @@
-package spark
+package sparkStreaming
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.streaming._
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka010._
-import org.slf4j.Logger
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-object StreamingSpark {
+object KafkaSparkStreaming {
+  def main(args: Array[String]): Unit = {
+    Logger.getLogger("org").setLevel(Level.OFF)
+    Logger.getLogger("akka").setLevel(Level.OFF)
 
-  def exampleStreaming(): Unit = {
-    val conf = new SparkConf().setMaster("local[*]").setAppName("EjemploSparkKafka")
-    val sc = new SparkContext(conf)
-    sc.setLogLevel("ERROR")
-    val ssc = new StreamingContext(sc, Seconds(2))
+    println("program started")
+
+    val conf = new SparkConf().setMaster("local[4]").setAppName("kafka-streaming")
+    val ssc = new StreamingContext(conf, Seconds(2))
     val topics = "test-tomysql" // lista de Topic de Kafka
     val brokers = "localhost:9092" // broker de Kafka
     val groupId = "Kafka-SparkConsumer" // Identificador del grupo.
@@ -24,24 +26,14 @@ object StreamingSpark {
       ConsumerConfig.GROUP_ID_CONFIG -> groupId,
       ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
       ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer])
+
     val messages = KafkaUtils.createDirectStream[String, String](
       ssc,
       LocationStrategies.PreferConsistent,
       ConsumerStrategies.Subscribe[String, String](topicsSet, kafkaParams))
-    val lines = messages.map(_.value)
-    val words = lines.flatMap(_.split(" "))
-    val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
-    println("================================================================")
-    println("================================================================")
-    wordCounts.print()
 
-    // Start the computation
+    messages.print()
     ssc.start()
     ssc.awaitTermination()
   }
-    def main(args: Array[String]): Unit = {
-
-
-      exampleStreaming()
-    }
 }
