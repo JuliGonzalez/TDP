@@ -9,7 +9,7 @@ from sklearn.feature_selection import RFE
 from sklearn.tree import DecisionTreeClassifier
 
 
-class FeatureSelection(object):
+class PreProcessData(object):
 
     def __init__(self):
         self.col_names = ["duration", "protocol_type", "service", "flag", "src_bytes",
@@ -181,7 +181,7 @@ class FeatureSelection(object):
 
 
 if __name__ == "__main__":
-    feature = FeatureSelection()
+    feature = PreProcessData()
     feature.show_info_from_dfs()
     df_cat_data, test_df_cat_data = feature.transform_df_to_non_categorical()
     newdf, newdf_test = feature.join_non_categorical_with_categorical_dataframes(df_cat_data, test_df_cat_data)
