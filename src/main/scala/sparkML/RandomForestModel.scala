@@ -44,4 +44,19 @@ object RandomForestModel extends App{
   KDD_Df.printSchema()
   KDD_Df.show(10)
   KDD_Df.describe("src_bytes").show()
+
+  val cols = Array("src_bytes", "dst_bytes", "wrong_fragment", "num_compromised", "same_srv_rate", "diff_srv_rate",
+  "dst_host_count", "dst_host_same_srv_rate", "dst_host_serror_rate", "dst_host_srv_serror_rate",
+  "service_ecr_i", "flag_RSTR", "flag_S0")
+
+  //Vector Assembler to add feature column
+  // input columns - cols
+  //feature columns - feature
+  val assembler = new VectorAssembler()
+    .setInputCols(cols)
+    .setOutputCol("features")
+  val featureDf = assembler.transform(KDD_Df)
+  featureDf.printSchema()
+  featureDf.show(10)
+
 }
