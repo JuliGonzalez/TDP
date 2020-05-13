@@ -176,32 +176,49 @@ class PreProcessData(object):
         rfcolname_df = list(column_names[i] for i in rfecolindex_df)
         return X_rfeDoS, rfcolname_df
 
+    def append_label_column_into_dataframe(self, df, df_label):
+        print("main df info:")
+        print(df.info())
+        print(type(df_label))
+        # print(df.shape())
+        list_labels = df_label.values.tolist()
+        print()
+        df['label'] = list_labels
+        return df
+
     def export_to_csv(self, df, _path):
         df.to_csv(path_or_buf=_path, sep=',', header=False, index=False)
+
+    def main(self):
+        self.show_info_from_dfs()
+        df_cat_data, test_df_cat_data = self.transform_df_to_non_categorical()
+        newdf, newdf_test = self.join_non_categorical_with_categorical_dataframes(df_cat_data, test_df_cat_data)
+        DoS_df, DoS_df_test, _, _, _, _, _, _ = self.split_dataframes_in_attack_categories(newdf, newdf_test)
+        X_DoS,  Y_DoS = self.feature_scaling(DoS_df)
+        X_DoS_test, Y_DoS_test = self.feature_scaling(DoS_df_test)
+        colNames = list(X_DoS)
+        colNames_test = list(X_DoS_test)
+        X_DoS = self.scale_dataframes_standard_scaler(X_DoS)
+        X_DoS_test = self.scale_dataframes_standard_scaler(X_DoS_test)
+        print(X_DoS.std(axis=0))
+        new_colsDoS = self.feature_selection(X_DoS, Y_DoS, colNames)
+        print('Features selected for DoS:', new_colsDoS)
+        print()
+        Dos_new_df, new_rfecolsDos = self.apply_recursive_feature_elimination(X_DoS, Y_DoS, colNames)
+        Dos_new_df_test, _ = self.apply_recursive_feature_elimination(X_DoS_test, Y_DoS_test, colNames)
+        print('Features selected for DoS:', new_rfecolsDos)
+        print()
+        pd_df = pd.DataFrame(data=Dos_new_df)
+        pd_df_test = pd.DataFrame(data=Dos_new_df_test)
+        pd_df_updated = self.append_label_column_into_dataframe(pd_df, Y_DoS)
+        pd_df_updated_test = self.append_label_column_into_dataframe(pd_df_test, Y_DoS_test)
+        # pd_df_label = pd.DataFrame(data=Y_DoS)
+        self.export_to_csv(pd_df_updated, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified.csv")
+        self.export_to_csv(pd_df_updated_test, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified_test.csv")
+        self.export_to_csv(Y_DoS, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified_label.csv")
 
 
 if __name__ == "__main__":
     feature = PreProcessData()
-    feature.show_info_from_dfs()
-    df_cat_data, test_df_cat_data = feature.transform_df_to_non_categorical()
-    newdf, newdf_test = feature.join_non_categorical_with_categorical_dataframes(df_cat_data, test_df_cat_data)
-    DoS_df, DoS_df_test, _, _, _, _, _, _ = feature.split_dataframes_in_attack_categories(newdf, newdf_test)
-    X_DoS,  Y_DoS = feature.feature_scaling(DoS_df)
-    X_DoS_test, Y_DoS_test = feature.feature_scaling(DoS_df_test)
-    colNames = list(X_DoS)
-    colNames_test = list(X_DoS_test)
-    X_DoS = feature.scale_dataframes_standard_scaler(X_DoS)
-    print(X_DoS.std(axis=0))
-    new_colsDoS = feature.feature_selection(X_DoS, Y_DoS, colNames)
-    print('Features selected for DoS:', new_colsDoS)
-    print()
-    Dos_new_df, new_rfecolsDos = feature.apply_recursive_feature_elimination(X_DoS, Y_DoS, colNames)
-    print('Features selected for DoS:', new_rfecolsDos)
-    print()
-    pd_df = pd.DataFrame(data=Dos_new_df)
-    print(pd_df.head())
-    print()
-    print(Y_DoS.head())
-    feature.export_to_csv(pd_df, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified.csv")
-
+    feature.main()
 
