@@ -15,6 +15,8 @@ object RandomForestModel extends App{
     .appName("RandomForest-Model")
     .getOrCreate()
   import spark.implicits._
+  // Adding error only handling on logs
+  spark.sparkContext.setLogLevel("ERROR")
 
   val path: String = "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified.csv"
   val path_test: String = "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified_test.csv"
@@ -88,6 +90,15 @@ object RandomForestModel extends App{
   testDf.printSchema()
   testDf.show(10)
 
+  val indexer = new StringIndexer()
+    .setInputCol("label")
+    .setOutputCol("label_mod")
+
+  val trainingLabelDf = indexer.fit(trainingDf).transform(trainingDf)
+  trainingLabelDf.printSchema()
+
+  val testLabelDf  = indexer.fit(testDf).transform(testDf)
+  testLabelDf.printSchema()
   // random  seed number to allowing repeating results
   val seed  = 5043
   val randomForestClassifier = new RandomForestClassifier()
@@ -97,11 +108,20 @@ object RandomForestModel extends App{
     .setFeatureSubsetStrategy("auto")
     .setSeed(seed)
 
-  val randomForestModel = randomForestClassifier.fit(trainingDf)
+  val randomForestModel = randomForestClassifier.fit(trainingLabelDf)
   println(randomForestModel.toDebugString)
 
-  val predictionDf = randomForestModel.transform(testDf)
+  val predictionDf = randomForestModel.transform(testLabelDf)
   predictionDf.show(10)
+
+  val stages = Array(assembler, indexer, randomForestClassifier)
+  val pipeline = new Pipeline().setStages(stages)
+
+  val  pipelineModel = pipeline.fit(KDD_Df)
+
+  val pipelinePredictionDf = pipelineModel.transform(KDD_Df_test)
+  pipelinePredictionDf.show(10)
+
   // evaluate model with area under ROC
   val evaluator = new BinaryClassificationEvaluator()
     .setLabelCol("label")
@@ -110,6 +130,10 @@ object RandomForestModel extends App{
   // measure the accuracy
   val accuracy = evaluator.evaluate(predictionDf)
   println("Accuracy:", accuracy)
+
+  val pipelineAccuracy = evaluator.evaluate(pipelinePredictionDf)
+  println("Accuracy: ", pipelineAccuracy)
+
 
   // parameters that needs to tune, we tune
   //  1. max buns
@@ -123,12 +147,27 @@ object RandomForestModel extends App{
 
   // define cross validation stage to search through the parameters
   // K-Fold cross validation with BinaryClassificationEvaluator
-  val stages = Array(assembler, indexer, randomForestClassifier)
-  val pipeline = new Pipeline().setStages(stages)
   val cv = new CrossValidator()
     .setEstimator(pipeline)
     .setEvaluator(evaluator)
     .setEstimatorParamMaps(paramGrid)
     .setNumFolds(5)
+
+  val cvModel =  cv.fit(KDD_Df)
+  val cvPredictionDf =  cvModel.transform(KDD_Df_test)
+  cvPredictionDf.show(10)
+
+  // measure the accuracy of cross validated model
+  // this model is more accurate than the old model
+  val cvAccuracy = evaluator.evaluate(cvPredictionDf)
+  println(cvAccuracy)
+
+  // save model
+  cvModel.write.overwrite()
+    .save("/home/juliangonzalez/IdeaProjects/TDP/models/randomForest")
+
+  // load CrossValidatorModel model here
+  //val cvModelLoaded = CrossValidatorModel
+    //.load("/home/juliangonzalez/IdeaProjects/TDP/models/randomForest")
 
 }

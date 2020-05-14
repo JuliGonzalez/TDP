@@ -2,14 +2,14 @@ package kafka
 
 import java.time.{Duration, LocalDateTime}
 
-import com.typesafe.scalalogging.Logger
+//  import com.typesafe.scalalogging.Logger
 import org.apache.kafka.clients.consumer.{ConsumerRecord, ConsumerRecords, KafkaConsumer}
 
 import scala.collection.JavaConverters.asJavaCollectionConverter
 import scala.util.{Failure, Success, Try}
 
 object KafkaHelper {
-  private[this] val logger = Logger(getClass.getSimpleName)
+  // private[this] val logger = Logger(getClass.getSimpleName)
 
   def produceMessages[T](f: ((Int, String)) => T, count: Int = 100): Seq[T] =
     (1 to count)
@@ -22,7 +22,7 @@ object KafkaHelper {
                     topic: String,
                     timeoutMillis: Long): Unit = {
 
-    logger.info(s"Start to consume from $topic")
+    // logger.info(s"Start to consume from $topic")
 
     consumer.subscribe(List(topic).asJavaCollection)
 /*

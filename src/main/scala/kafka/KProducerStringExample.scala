@@ -3,7 +3,7 @@ package kafka
 import java.util.Properties
 
 import kafka.KafkaHelper
-import com.typesafe.scalalogging.Logger
+// import com.typesafe.scalalogging.Logger
 import org.apache.kafka.clients.producer.ProducerConfig._
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.kafka.common.serialization.StringSerializer
@@ -12,7 +12,7 @@ import org.apache.kafka.common.serialization.StringSerializer
  * https://kafka.apache.org/20/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html
  */
 object KProducerStringExample {
-  private[this] val logger = Logger(getClass.getSimpleName)
+  // private[this] val logger = Logger(getClass.getSimpleName)
 
   private[this] val BOOTSTRAP_SERVERS_VALUE = "localhost:9092"
   private[this] val TOPIC_NAME = "test-tomysql"
@@ -31,7 +31,7 @@ object KProducerStringExample {
   }
 
   def main(args: Array[String]): Unit = {
-    logger.info(s"Start to produce on $TOPIC_NAME")
+    //logger.info(s"Start to produce on $TOPIC_NAME")
 
     val producer = newProducer()
 
@@ -43,7 +43,7 @@ object KProducerStringExample {
 
     producer.close()
 
-    logger.info(s"Finish to produce on $TOPIC_NAME")
+    //logger.info(s"Finish to produce on $TOPIC_NAME")
   }
 
 }

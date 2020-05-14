@@ -212,9 +212,10 @@ class PreProcessData(object):
         pd_df_test = pd.DataFrame(data=Dos_new_df_test)
         pd_df_updated = self.append_label_column_into_dataframe(pd_df, Y_DoS)
         pd_df_updated_test = self.append_label_column_into_dataframe(pd_df_test, Y_DoS_test)
-        # pd_df_label = pd.DataFrame(data=Y_DoS)
+        all_in_pd_df = pd.concat([pd_df_updated, pd_df_updated_test])
         self.export_to_csv(pd_df_updated, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified.csv")
         self.export_to_csv(pd_df_updated_test, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified_test.csv")
+        self.export_to_csv(all_in_pd_df, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified_all.csv")
         self.export_to_csv(Y_DoS, "/home/juliangonzalez/IdeaProjects/TDP/input/KDDTrain_modified_label.csv")
 
 

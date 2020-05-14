@@ -2,7 +2,7 @@ package kafka
 
   import cakesolutions.kafka.KafkaProducer
   import cakesolutions.kafka.KafkaProducer.Conf
-  import com.typesafe.scalalogging.Logger
+  //import com.typesafe.scalalogging.Logger
   import io.confluent.kafka.serializers.{AbstractKafkaAvroSerDeConfig, KafkaAvroSerializer}
   import org.apache.avro.Schema
   import org.apache.avro.generic.{GenericData, GenericEnumSymbol, GenericRecord}
@@ -16,7 +16,7 @@ package kafka
    * https://github.com/confluentinc/kafka-streams-examples/blob/5.0.x/src/test/scala/io/confluent/examples/streams/GenericAvroScalaIntegrationTest.scala
    */
   object KafkaAvroProducer {
-    private[this] val logger = Logger(getClass.getSimpleName)
+    //private[this] val logger = Logger(getClass.getSimpleName)
 
     private[this] val BOOTSTRAP_SERVERS_VALUE = "localhost:9092"
     private[this] val SCHEMA_REGISTRY_URL_VALUE = "http://localhost:8081"
@@ -42,7 +42,7 @@ package kafka
 
     // prefer avro4s approach
     def main(args: Array[String]): Unit = {
-      logger.info(s"Start to produce on $TOPIC_NAME")
+      // logger.info(s"Start to produce on $TOPIC_NAME")
 
       val producer = newProducer()
 
@@ -73,18 +73,18 @@ package kafka
             new ProducerRecord[String, GenericRecord](TOPIC_NAME, key, customer)
         }
         .foreach { record =>
-          logger.info(s"record: $record")
+          //logger.info(s"record: $record")
           producer.send(record).onComplete {
             case Success(recordMetadata) =>
-              logger.info(s"recordMetadata timestamp: ${recordMetadata.timestamp()}")
+              //logger.info(s"recordMetadata timestamp: ${recordMetadata.timestamp()}")
             case Failure(exception) =>
-              logger.error(s"error: $exception")
+              //logger.error(s"error: $exception")
           }(scala.concurrent.ExecutionContext.global)
         }
 
       producer.close()
 
-      logger.info(s"Finish to produce on $TOPIC_NAME")
+      //logger.info(s"Finish to produce on $TOPIC_NAME")
     }
 
   }
