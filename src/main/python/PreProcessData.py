@@ -198,9 +198,10 @@ class PreProcessData(object):
         X_DoS_test, Y_DoS_test = self.feature_scaling(DoS_df_test)
         colNames = list(X_DoS)
         colNames_test = list(X_DoS_test)
-        X_DoS = self.scale_dataframes_standard_scaler(X_DoS)
-        X_DoS_test = self.scale_dataframes_standard_scaler(X_DoS_test)
-        print(X_DoS.std(axis=0))
+        # TODO desescalated files to check values easier.
+        # X_DoS = self.scale_dataframes_standard_scaler(X_DoS)
+        # X_DoS_test = self.scale_dataframes_standard_scaler(X_DoS_test)
+        # print(X_DoS.std(axis=0))
         new_colsDoS = self.feature_selection(X_DoS, Y_DoS, colNames)
         print('Features selected for DoS:', new_colsDoS)
         print()

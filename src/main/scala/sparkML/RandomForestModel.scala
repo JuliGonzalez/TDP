@@ -74,7 +74,8 @@ object RandomForestModel extends App{
 
   val cols = Array("src_bytes", "dst_bytes", "wrong_fragment", "num_compromised", "same_srv_rate", "diff_srv_rate",
   "dst_host_count", "dst_host_same_srv_rate", "dst_host_serror_rate", "dst_host_srv_serror_rate",
-  "service_ecr_i", "flag_RSTR", "flag_S0", "label")
+  "service_ecr_i", "flag_RSTR", "flag_S0")
+  //TODO Should remove label from here?
 
   //Vector Assembler to add feature column
   // input columns - cols
@@ -124,7 +125,7 @@ object RandomForestModel extends App{
 
   // evaluate model with area under ROC
   val evaluator = new BinaryClassificationEvaluator()
-    .setLabelCol("label")
+    .setLabelCol("label_mod")
     .setMetricName("areaUnderROC")
 
   // measure the accuracy
