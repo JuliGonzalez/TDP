@@ -39,4 +39,6 @@ object UseRandomForestModel extends App{
   val df2 = cvModelLoaded.transform(df1)
   df2.show()
 
+  spark.close()
+
 }

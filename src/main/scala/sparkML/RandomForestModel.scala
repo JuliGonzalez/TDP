@@ -166,9 +166,4 @@ object RandomForestModel extends App{
   // save model
   cvModel.write.overwrite()
     .save("/home/juliangonzalez/IdeaProjects/TDP/models/randomForest")
-
-  // load CrossValidatorModel model here
-  //val cvModelLoaded = CrossValidatorModel
-    //.load("/home/juliangonzalez/IdeaProjects/TDP/models/randomForest")
-
 }
