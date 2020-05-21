@@ -28,7 +28,7 @@ object KafkaExampleAvroNetwork extends App {
       val cols = line.split(',').map(_.trim)
       Try(producer.produce("test-tomysql", Router(3), NetworkConnection(cols(0).toDouble, cols(1).toDouble,
         cols(2).toDouble, cols(3).toDouble, cols(4).toDouble, cols(5).toDouble, cols(6).toDouble, cols(7).toDouble,
-        cols(8).toDouble, cols(9).toDouble, cols(10).toDouble, cols(11).toDouble, cols(12).toDouble)))
+        cols(8).toDouble, cols(9).toDouble, cols(10).toDouble, cols(11).toDouble, cols(12).toDouble, cols(13).toDouble)))
       match {
         case Success(m) =>
           val metadata = m.get()

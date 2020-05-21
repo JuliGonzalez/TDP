@@ -7,6 +7,7 @@ import org.apache.avro.generic.GenericRecord
 import org.apache.commons.codec.StringDecoder
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.spark.SparkConf
+import org.apache.spark.ml.tuning.CrossValidatorModel
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{Encoder, SparkSession}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
@@ -30,6 +31,10 @@ object SparkStreamingAvroNetwork extends App {
   val client = new CachedSchemaRegistryClient(schemaRegUrl, 100)
   val topic = "test-tomysql"
 
+  val cvModelLoaded = CrossValidatorModel
+    .load("/home/juliangonzalez/IdeaProjects/TDP/models/randomForest")
+
+
   val schemaRegistryConf = Map(
     SchemaManager.PARAM_SCHEMA_REGISTRY_URL     -> "http://localhost:8081",
     SchemaManager.PARAM_SCHEMA_REGISTRY_TOPIC   -> "test-tomysql",
@@ -46,7 +51,7 @@ object SparkStreamingAvroNetwork extends App {
     .option("startingOffsets", "latest")
     .load()
   //add confluent kafka avro deserializer, needed to read messages appropriately
-  val deserializer = new KafkaAvroDeserializer(client).asInstanceOf[Deserializer[GenericRecord]]
+  //val deserializer = new KafkaAvroDeserializer(client).asInstanceOf[Deserializer[GenericRecord]]
 
   //needed to convert column select into Array[Bytes]
   import spark.implicits._
@@ -58,6 +63,8 @@ object SparkStreamingAvroNetwork extends App {
   val schemaConf = "true"
   val results = df.select(from_avro(col("value"), schemaRegistryConf) as 'data).select("data.*")
   println(results)
+  val df1 = cvModelLoaded.transform(results)
+  //df1.show()
   /*val results = df.select(col("value").as[Array[Byte]]).map{ rawBytes: Array[Byte] =>
     //read the raw bytes from spark and then use the confluent deserializer to get the record back
     val decoded = deserializer.deserialize(topic, rawBytes)
@@ -85,7 +92,7 @@ object SparkStreamingAvroNetwork extends App {
     .add("dst_bytes", StringType))
   }*/
 
-  results.writeStream
+  df1.writeStream
     .outputMode("append")
     .format("console")
     .option("truncate", "false")
