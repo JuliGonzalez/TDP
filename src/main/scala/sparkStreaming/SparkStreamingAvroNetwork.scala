@@ -16,6 +16,7 @@ import scala.collection.mutable.ListBuffer
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.{StringType, StructType}
 import org.apache.spark.streaming.kafka010.KafkaUtils
+/*
 import za.co.absa.abris.avro.functions.from_avro
 import za.co.absa.abris.avro.read.confluent.SchemaManager
 
@@ -100,3 +101,4 @@ object SparkStreamingAvroNetwork extends App {
     .awaitTermination()
 
 }
+*/

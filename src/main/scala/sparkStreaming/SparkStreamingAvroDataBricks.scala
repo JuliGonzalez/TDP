@@ -1,6 +1,6 @@
 package sparkStreaming
 
-import org.apache.spark.sql.avro.from_avro
+//import org.apache.spark.sql.avro.from_avro
 import org.apache.avro.SchemaBuilder
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
