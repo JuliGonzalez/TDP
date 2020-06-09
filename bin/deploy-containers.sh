@@ -1,6 +1,6 @@
 pwd
-cd /home/juliangonzalez/Projects/connect-kafka-connector/
+cd /home/juliangonzalez/IdeaProjects/TDP
 docker-compose up -d
-sleep 30
+sleep 1
 cd /home/juliangonzalez/IdeaProjects/TDP/bin/
 /bin/bash kafka/create-connector.sh
